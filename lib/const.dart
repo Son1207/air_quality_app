@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 Color getAqiColor(int aqi) {
-  if (aqi < 50) {
+  if (aqi >= 0 && aqi <= 50) {
     return const Color(0xFF00e400);
   } else if (aqi < 100) {
     return const Color(0xFFffff00);
