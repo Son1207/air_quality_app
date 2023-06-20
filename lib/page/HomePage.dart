@@ -22,13 +22,6 @@ class _AirQualityHomePageState extends State<AirQualityHomePage> {
   bool isSearching = false;
   bool isButtonPressed = false;
 
-  Future<void> saveInformation() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    // Save the information to SharedPreferences
-    await prefs.setBool('buttonPressed', true);
-    print('Information saved to SharedPreferences!');
-  }
-
   Future<List<City>> searchCities(String keyword) async {
     final response = await http.get(
       Uri.parse(
@@ -238,6 +231,7 @@ class _AirQualityHomePageState extends State<AirQualityHomePage> {
                         padding: const EdgeInsets.only(top: 0.0),
                         child: Column(
                           children: [
+
                             IconButton(
                               iconSize: 35,
                               icon: Icon(
@@ -251,7 +245,7 @@ class _AirQualityHomePageState extends State<AirQualityHomePage> {
                               },
                             ),
                             Padding(
-                              padding: EdgeInsets.only(top: 10),
+                              padding: const EdgeInsets.fromLTRB(10,10,10,20),
                               child: Text(
                                 city.name,
                                 maxLines: 2,
