@@ -1,4 +1,5 @@
 import 'package:air_quality_app/page/HomePage.dart';
+import 'package:air_quality_app/page/affect_detail.dart';
 import 'package:flutter/material.dart';
 
 
@@ -14,7 +15,13 @@ class AirQualityApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.brown,
       ),
-      home: const AirQualityHomePage(),
+      initialRoute: '/',
+      routes: {
+        AffectDetailsPage.routeName: (context) {
+          return AffectDetailsPage(aqi: ModalRoute.of(context)?.settings.arguments as int);
+        },
+      },
+      home:  const AirQualityHomePage(),
     );
   }
 }

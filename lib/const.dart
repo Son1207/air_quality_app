@@ -42,7 +42,7 @@ Text getAffect(int aqi) {
       'Good',
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        fontSize: 18.0,
+        fontSize: 40.0,
         color: Colors.white,
       ),
     );
@@ -51,16 +51,16 @@ Text getAffect(int aqi) {
       'Moderate',
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        fontSize: 18.0,
+        fontSize: 40.0,
         color: Colors.black,
       ),
     );
   } else if (aqi < 150) {
     return const Text(
-      'Unhealthy for Sensitive Groups',
+      'Unhealthy',
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        fontSize: 18.0,
+        fontSize: 40.0,
         color: Colors.white,
       ),
     );
@@ -69,7 +69,7 @@ Text getAffect(int aqi) {
       'Unhealthy',
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        fontSize: 18.0,
+        fontSize: 40.0,
         color: Colors.white,
       ),
     );
@@ -78,7 +78,7 @@ Text getAffect(int aqi) {
       'Very Unhealthy',
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        fontSize: 18.0,
+        fontSize: 40.0,
         color: Colors.white,
       ),
     );
@@ -87,9 +87,11 @@ Text getAffect(int aqi) {
       'Hazardous',
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        fontSize: 18.0,
+        fontSize: 40.0,
         color: Colors.white,
       ),
     );
   }
 }
+
+

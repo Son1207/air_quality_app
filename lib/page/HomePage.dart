@@ -1,6 +1,9 @@
+import 'package:air_quality_app/page/affect_detail.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 import '../const.dart';
 import '../models/city_model.dart';
@@ -17,6 +20,14 @@ class _AirQualityHomePageState extends State<AirQualityHomePage> {
   List<City> cities = [];
   String keyword = '';
   bool isSearching = false;
+  bool isButtonPressed = false;
+
+  Future<void> saveInformation() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // Save the information to SharedPreferences
+    await prefs.setBool('buttonPressed', true);
+    print('Information saved to SharedPreferences!');
+  }
 
   Future<List<City>> searchCities(String keyword) async {
     final response = await http.get(
@@ -114,7 +125,7 @@ class _AirQualityHomePageState extends State<AirQualityHomePage> {
           else if (cities.isNotEmpty)
             Expanded(
               child: ListView.builder(
-                itemCount: cities.length,
+                itemCount: 1,
                 itemBuilder: (BuildContext context, int index) {
                   return buildCityCard(cities[index]);
                 },
@@ -126,89 +137,137 @@ class _AirQualityHomePageState extends State<AirQualityHomePage> {
   }
 
   Widget buildCityCard(City city) {
+    Color getRangeColor(int aqi) {
+      if (aqi >= 0 && aqi <= 50) {
+        return const Color(0xFF00e400); // Change the color for the range 0-50
+      } else if (aqi >= 51 && aqi <= 100) {
+        return const Color(0xFFffff00); // Change the color for the range 51-100
+      } else if (aqi >= 101 && aqi <= 150) {
+        return const Color(0xFFff7e00); // Change the color for the range 101-150
+      } else if (aqi >= 151 && aqi <= 200) {
+        return const Color(0xFFff0000); // Change the color for the range 151-200
+      } else if (aqi >= 201 && aqi <= 300) {
+        return const Color(0xFF99004c); // Change the color for the range 201-300
+      } else {
+        return const Color(0xFF7e0023); // Change the color for values above 300
+      }
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 8.0, 0, 0),
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: getAqiColor(city.aqi),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      city.name,
-                      maxLines: 3,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
-                        color: getNameColor(city.aqi),
-                      ),
-                    ),
-                    Text(
-                      city.aqi.toString(),
-                      style: TextStyle(
-                        fontSize: 40.0,
-                        color: getNameColor(city.aqi),
-                      ),
-                    ),
-                    getAffect(city.aqi),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Column(
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8, 0),
+            child: Stack(
+              alignment: Alignment.center,
               children: [
-                Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(16.0,8.0,0,0),
-                      child: Image(image: AssetImage('assets/image/timezone.png'),width: 20,),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(4.0,8.0,0,0),
-                      child: Text(
-                        'Timezone: ${city.tz}',style: const TextStyle(fontSize: 16),
+                ClipOval(
+                  child: Container(
+                    width: 350,
+                    height: 350,
+                    color: Colors.blue[400],
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          AffectDetailsPage.routeName,
+                          arguments: city.aqi,
+                        );
+                      },
+                      child: SfRadialGauge(
+                        // Radial gauge configuration
+                        axes: <RadialAxis>[
+                          RadialAxis(
+                            showLabels: false,
+                            showTicks: false,
+                            minimum: 0,
+                            maximum: 400,
+                            axisLineStyle: const AxisLineStyle(
+                              thickness: 10,
+                              cornerStyle: CornerStyle.bothCurve,
+                              color: Colors.white54,
+                            ),
+                            ranges: <GaugeRange>[
+                              GaugeRange(
+                                startValue: 0,
+                                endValue: city.aqi.toDouble(),
+                                color: getRangeColor(city.aqi),
+                              ),
+                            ],
+                            annotations: <GaugeAnnotation>[
+                              GaugeAnnotation(
+                                // Custom annotation widget inside the gauge
+                                widget: Column(
+                                  children: [
+                                    Text(
+                                      city.aqi.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 50,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10,),
+                                    getAffect(city.aqi),
+                                    Text(
+                                      'Updated: ${city.stime.toString()}',
+                                      style: const TextStyle(fontSize: 16, color: Colors.white),
+                                    ),
+                                    const SizedBox(height: 80,),
+                                  ],
+                                ),
+                                angle: 90,
+                                positionFactor: 0.4,
+                              )
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-                Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(16.0,8.0,0,0),
-                      child: Image(image: AssetImage('assets/image/time.png'),width: 20,),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(4.0,8.0,0,0),
-                      child: Text(
-                        'Local Time: ${city.stime}',style: const TextStyle(fontSize: 16),
+                Positioned(
+                  bottom:-80,
+                  child: ClipOval(
+                    child: Container(
+                      height: 200,
+                      width: 200,
+                      color: Colors.white54,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 0.0),
+                        child: Column(
+                          children: [
+                            IconButton(
+                              iconSize: 35,
+                              icon: Icon(
+                                Icons.add_location,
+                                color: isButtonPressed ? Colors.orange : Colors.black,
+                              ),
+                              onPressed: () async {
+                                setState(() {
+                                  isButtonPressed = !isButtonPressed;
+                                });
+                              },
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: Text(
+                                city.name,
+                                maxLines: 2,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.0,
+                                  color: Colors.brown,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(16.0,8.0,0,0),
-                      child: Image(image: AssetImage('assets/image/clock.png'),width: 20,),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(4.0,8.0,0,0),
-                      child: Text(
-                        'Numeric Time: ${city.vtime}',style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
