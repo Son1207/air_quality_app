@@ -2,7 +2,6 @@ import 'package:air_quality_app/page/affect_detail.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 import '../const.dart';
@@ -56,7 +55,7 @@ class _AirQualityHomePageState extends State<AirQualityHomePage> {
     super.initState();
     // Call the searchCities function when entering the screen and no search keyword is provided to get default data for London
     if (keyword.isEmpty) {
-      searchCities('VietNam').then((foundCities) {
+      searchCities('Ho Chi Minh City').then((foundCities) {
         setState(() {
           cities = foundCities;
         });
@@ -130,22 +129,6 @@ class _AirQualityHomePageState extends State<AirQualityHomePage> {
   }
 
   Widget buildCityCard(City city) {
-    Color getRangeColor(int aqi) {
-      if (aqi >= 0 && aqi <= 50) {
-        return const Color(0xFF00e400); // Change the color for the range 0-50
-      } else if (aqi >= 51 && aqi <= 100) {
-        return const Color(0xFFffff00); // Change the color for the range 51-100
-      } else if (aqi >= 101 && aqi <= 150) {
-        return const Color(0xFFff7e00); // Change the color for the range 101-150
-      } else if (aqi >= 151 && aqi <= 200) {
-        return const Color(0xFFff0000); // Change the color for the range 151-200
-      } else if (aqi >= 201 && aqi <= 300) {
-        return const Color(0xFF99004c); // Change the color for the range 201-300
-      } else {
-        return const Color(0xFF7e0023); // Change the color for values above 300
-      }
-    }
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
@@ -158,8 +141,8 @@ class _AirQualityHomePageState extends State<AirQualityHomePage> {
               children: [
                 ClipOval(
                   child: Container(
-                    width: 350,
-                    height: 350,
+                    width: 400,
+                    height: 400,
                     color: Colors.blue[400],
                     child: GestureDetector(
                       onTap: () {
