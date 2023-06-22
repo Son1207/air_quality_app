@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 Color getNameColor(int aqi) {
   if (aqi < 50) {
     return Colors.white;
@@ -178,27 +177,23 @@ Color getRangeColor(int aqi) {
 
 String getDetailAffect(int aqi) {
   if (aqi >= 0 && aqi <= 50) {
-    return 'Air quality is considered satisfactory, and air '
-        'pollution poses little or no risk';
+    return 'Air quality is considered satisfactory, and air pollution poses '
+        'little or no risk';
   } else if (aqi >= 51 && aqi <= 100) {
-    return 'Air quality is acceptable; however, for some '
-        'pollutants there may be a moderate health concern'
-        ' for a very small number of people who are unusually '
-        'sensitive to air pollution.';
+    return 'Air quality is acceptable; however, for some pollutants there may '
+        'be a moderate health concern for a very small number of people who '
+        'are unusually sensitive to air pollution.';
   } else if (aqi >= 101 && aqi <= 150) {
-    return 'Members of sensitive groups may experience '
-        'health effects. The general public is not likely '
-        'to be affected.';
+    return 'Members of sensitive groups may experience health effects. '
+        'The general public is not likely to be affected.';
   } else if (aqi >= 151 && aqi <= 200) {
-    return 'Everyone may begin to experience health effects; '
-        'members of sensitive groups may experience more '
-        'serious health effects';
+    return 'Everyone may begin to experience health effects; members of '
+        'sensitive groups may experience more serious health effects';
   } else if (aqi >= 201 && aqi <= 300) {
     return 'Health warnings of emergency conditions. '
         'The entire population is more likely to be affected.';
   } else {
-    return 'Health alert: everyone may experience more '
-        'serious health effects';
+    return 'Health alert: everyone may experience more serious health effects';
   }
 }
 

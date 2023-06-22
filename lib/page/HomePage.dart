@@ -43,7 +43,6 @@ class _AirQualityHomePageState extends State<AirQualityHomePage> {
           cities.add(city);
         }
       }
-
       return cities;
     } else {
       throw Exception('Failed to search cities');
@@ -113,7 +112,7 @@ class _AirQualityHomePageState extends State<AirQualityHomePage> {
             ),
           ),
           if (isSearching)
-            const Center(child: CircularProgressIndicator())
+            const Center(child: CircularProgressIndicator(backgroundColor: Colors.redAccent,))
           else if (cities.isNotEmpty)
             Expanded(
               child: ListView.builder(
@@ -214,7 +213,6 @@ class _AirQualityHomePageState extends State<AirQualityHomePage> {
                         padding: const EdgeInsets.only(top: 0.0),
                         child: Column(
                           children: [
-
                             IconButton(
                               iconSize: 35,
                               icon: Icon(
